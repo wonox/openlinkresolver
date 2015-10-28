@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+  <script>
+  function kakunin(){
+      var formValue = $('#test-form [name=test-form]').val();
+  var formValue3 = $('#my-text').val();
+  //var formValue2 = document.getElementById('my-text').value;
+
+  var val = Number(formValue) || 0; // NaNのときは0
+  alert(formValue);
+  alert(formValue3);
+  alert(val); // => 56
+}
+  </script>
+</head>
+
+<body>
+<form id="test-form">
+    <input type="text" id="my-text" name="test-form" value="56" />
+    <span id="buttun" onClick="kakunin()">but</span>
+</form>
+
+</body>
+</html>

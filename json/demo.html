@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script>
+$(function() {
+  var keyname = '岐阜薬科大学紀要';
+  // var ulObj = $("#demo"),
+  //JSON取得
+  $.getJSON("data10000.json",function(data){
+    var eventList=jsonParse(data);
+    // alert(eventList);
+    $("#demo").html(eventList);
+    //ulObj.append($("<li>")
+    });
+
+  //パース関数
+  function jsonParse(data){
+    var eventList="";
+    var data=data[ keyname ];
+      //alert(data.publication_title);
+      // $.each(data,function(i,item){
+      // eventList+='<li>' + item + ':' + data[i] + '</li>';
+      for(key in data){
+        // alert(key + " : " + data[key] ) ;
+        eventList+='<li>' + key + ':' + data[key] + '</li>'
+      }
+      //});
+    return eventList;
+  }
+
+
+});
+</script>
+</head>
+<body>
+<ul id="demo"></ul>
+</body>
+</html>

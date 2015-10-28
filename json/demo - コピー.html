@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script>
+$(function() {
+  $.getJSON("data2.json" , function(data) {
+    var
+      ulObj = $("#demo"),
+      len = data.length;
+
+      var myJson = $.parseJSON(data);
+      alert(myJson['1880-4322']);
+
+    for(var i = 0; i < len; i++) {
+      ulObj.append($("<li>").attr({'1880-4322':data[i].id}).text(data[i].name));
+    }
+  });
+});
+</script>
+</head>
+<body>
+<ul id="demo"></ul>
+</body>
+</html>
