@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<meta charset="UTF-8" />
+<title>TSV file to JSON</title>
+<script src="json2.js"></script>
+<script>
+
+  // A tag href attribute Blob set
+  // Blobに含めるデータは、引数で指定する。
+  function setBlobUrl(id, result) {
+    console.log("window.Blob=" + window.Blob); // IE 10.0以降、Firefox 13.0以降、Chrome 20.0以降、Safari 6.0以降
+    console.log("window.URL=" + window.URL); // IE 10.0以降、Firefox 12.0以降
+    console.log("window.webkitURL=" + window.webkitURL);     // Chrome 20.0以降, Safari 6.0以降
+
+    // 指定されたデータを保持するBlobを作成する。
+    var blob = new Blob([ result ], { "type" : "text/plain;charset=UTF-8" });
+
+    // 指定されたidタグのhref属性にBlobオブジェクトを設定する。
+    window.URL = window.URL || window.webkitURL;
+    $("#" + id).attr("href", window.URL.createObjectURL(blob));
+  }
+
+  //var csv is the CSV file with headers
+  function csvJSON(csv){
+    var hashItems = {};  //連想配列がうまくJSON.stringifyするため
+    var lines=csv.split("\n");
+    var result = [];
+    // var result = {};
+    var headers=lines[0].split("\t");
+    for(var i=1;i<lines.length-1;i++){
+      var obj = {};
+      var currentline=lines[i].split("\t");
+      for(var j=0;j<headers.length;j++){
+        obj[headers[j]] = currentline[j];
+      }
+
+      currentline[1] === "" ? keydata = currentline[0] : keydata = currentline[1];
+      hashItems[keydata] = obj;
+    }
+      result.push(hashItems);
+
+    return JSON.stringify(result, null, '\t'); //JSON
+  }
+
+window.addEventListener('DOMContentLoaded', function() {
+// ファイルが指定されたタイミングで、その内容を表示
+document.querySelector("#file").addEventListener('change', function(e) {
+    // File APIを利用できるかをチェック
+    if (window.File && window.FileReader && window.FileList && window.Blob) {
+      // 指定されたファイルを取得
+      var input = document.querySelector('#file').files[0];
+      // ファイル読み込みの準備（1）
+      var reader = new FileReader();
+
+      // ファ//イルの読み込みに成功したら、その内容を<div id="result">に反映（2）
+      reader.addEventListener('load', function(e) {
+
+        var output = csvJSON(reader.result);
+
+        document.querySelector("#result").innerHTML = output;
+        document.querySelector("#download").innerHTML = "download[raw]";
+
+        $("#result").keyup(function(){
+          setBlobUrl("download", output);
+        });
+        $("#result").keyup();
+
+      }, true);
+      // ファイルの内容をテキストとして取得（3）
+
+      reader.readAsText(input, 'UTF-8');
+
+} else {
+  alert('The File APIs are not fully supported in this browser.');
+}
+  }, true);
+
+});
+</script>
+</head>
+<body>
+file：
+<input id="file" name="file" type="file" />
+<hr />
+<a id="download" target="_blank"></a>
+<!-- p><a href=# id="download" onclick="startDownload()">ダウンロード</a></p-- >
+<hr />
+<!--読み込み結果を反映する場所を用意-->
+<div id="result"></div>
+
+</body>
+</html>
