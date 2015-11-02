@@ -59,6 +59,9 @@ document.querySelector("#file").addEventListener('change', function(e) {
 
         var output = csvJSON(reader.result);
 
+        output = output.replace(/^\[\n/,"");
+        output = output.replace(/\]$/,"");
+
         document.querySelector("#result").innerHTML = output;
         document.querySelector("#download").innerHTML = "download[raw]";
 
